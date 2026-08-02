@@ -1,12 +1,98 @@
 """
-Pure wikitext parsing utilities.
-No network I/O — all functions take strings and return strings/dicts/lists.
+Support library for the scrape pipeline: MediaWiki network I/O, wikitext
+parsing, and table-cell value coercion. Pure functions/classes only — no
+CLI entry points here, see run_all.py.
 """
 
+import json
 import re
+import sys
+import urllib.request
+import urllib.parse
+from pathlib import Path
 
 
-#  Template processing 
+#  MediaWiki API client
+
+class WikiClient:
+    BASE = "https://tpdp.miraheze.org"
+    API  = f"{BASE}/w/api.php"
+    SPR  = f"{BASE}/wiki/Special:FilePath/"
+    UA   = ("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+            "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+
+    def fetch_wikitext(self, title: str) -> str | None:
+        """Fetch raw wikitext for a wiki page. Returns None if not found."""
+        params = urllib.parse.urlencode({
+            "action": "query", "prop": "revisions",
+            "rvprop": "content", "format": "json", "titles": title,
+        })
+        req = urllib.request.Request(
+            f"{self.API}?{params}", headers={"User-Agent": self.UA}
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=40) as resp:
+                data = json.loads(resp.read())
+            pages = data["query"]["pages"]
+            p = next(iter(pages.values()))
+            if "revisions" not in p:
+                return None
+            return p["revisions"][0]["*"]
+        except Exception as e:
+            print(f"  ERR fetch({title!r}): {e}", file=sys.stderr)
+            return None
+
+    def download_file(self, url: str, dest: Path) -> bool:
+        """Download a URL to dest, following redirects. Returns True on success."""
+        req = urllib.request.Request(
+            self._encode_url(url), headers={"User-Agent": self.UA}
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                ct = resp.headers.get("Content-Type", "")
+                if not ct.startswith("image/"):
+                    return False
+                dest.write_bytes(resp.read())
+            return True
+        except Exception as e:
+            print(f"  ERR download({dest.name!r}): {e}", file=sys.stderr)
+            return False
+
+    def sprite_urls(self, imagename: str, changed: bool = False) -> dict[str, str]:
+        """
+        Build the four sprite URLs for a puppet from its imagename.
+        If changed=True, the base sprite uses the 'a' variant (changedsprites flag).
+        """
+        b = urllib.parse.quote(imagename)
+        if changed:
+            return {
+                "normal":      f"{self.SPR}{b} a.gif",
+                "alt_color":   f"{self.SPR}{b} 1a.gif",
+                "alt_costume": f"{self.SPR}{b} 2a.gif",
+                "wedding":     f"{self.SPR}{b} W.gif",
+            }
+        return {
+            "normal":      f"{self.SPR}{b}.gif",
+            "alt_color":   f"{self.SPR}{b} 1.gif",
+            "alt_costume": f"{self.SPR}{b} 2.gif",
+            "wedding":     f"{self.SPR}{b} W.gif",
+        }
+
+    @staticmethod
+    def filename_from_url(url: str) -> str:
+        """Extract and URL-decode the filename from a Special:FilePath URL."""
+        after = url.split("Special:FilePath/", 1)[-1]
+        return urllib.parse.unquote(after)
+
+    @staticmethod
+    def _encode_url(url: str) -> str:
+        """Normalise a Special:FilePath URL: decode fully, then re-encode safely."""
+        base = "https://tpdp.miraheze.org/wiki/Special:FilePath/"
+        after = url[len(base):]
+        return base + urllib.parse.quote(urllib.parse.unquote(after), safe="")
+
+
+#  Template processing
 
 def strip_templates(s: str) -> str:
     """
@@ -85,7 +171,7 @@ def parse_template_args(tmpl: str) -> dict[str, str]:
     return args
 
 
-#  Markup cleanup 
+#  Markup cleanup
 
 # Matches leading attribute prefixes like:  style="color:red" |
 # or multiple attributes:  scope="col" style="..." |
@@ -125,7 +211,7 @@ def extract_cell(raw: str | None) -> str | None:
     return s if s not in ("--", "N/A", "") else None
 
 
-#  Cell splitting 
+#  Cell splitting
 
 def split_cells(line: str) -> list[str]:
     """
@@ -151,7 +237,7 @@ def split_cells(line: str) -> list[str]:
     return cells
 
 
-#  Tabber 
+#  Tabber
 
 def tabber_section(wikitext: str, tab_name: str) -> str:
     """
@@ -176,7 +262,7 @@ def all_tabber_sections(wikitext: str) -> list[tuple[str, str]]:
     return result
 
 
-#  Table parsing 
+#  Table parsing
 
 def parse_table(text: str) -> tuple[list[str], list[list[str | None]]]:
     """
@@ -242,3 +328,44 @@ def all_tables(content: str) -> list[str]:
         out.append(content[ts:te+2])
         i = te + 2
     return out
+
+
+#  Value coercion
+
+def to_int(v: str | None) -> int | None:
+    """Convert a cell string to int. Handles --, N/A, and leading + sign."""
+    if not v:
+        return None
+    v = v.strip().lstrip("+")
+    if v in ("--", "N/A", ""):
+        return None
+    try:
+        return int(v)
+    except ValueError:
+        return None
+
+
+def parse_accuracy(v: str | None) -> int | None:
+    """Convert '100%' → 100. Strips the percent sign before coercing."""
+    if not v:
+        return None
+    return to_int(v.strip().rstrip("%"))
+
+
+def parse_price(v: str | None) -> int | None:
+    """
+    Convert '15,000円' → 15000.
+    Returns None for items that have no purchase price (--, N/A, empty).
+    """
+    if not v:
+        return None
+    v = v.strip().replace("円", "").replace(",", "").strip()
+    return to_int(v)
+
+
+def nullify(v: str | None) -> str | None:
+    """Return None for empty/placeholder strings; strip whitespace otherwise."""
+    if v is None:
+        return None
+    v = v.strip()
+    return None if v.lower() in ("none", "n/a", "–", "--", "") else v

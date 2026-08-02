@@ -246,11 +246,3 @@ def build(data_json: Path = DATA_JSON, data_db: Path = DATA_DB) -> None:
     print(f"  skills:    {len(data['skills'])} base, {len(data['mod_skills'])} mod", file=sys.stderr)
     print(f"  abilities: {len(data['abilities'])} base, {len(data['mod_abilities'])} mod", file=sys.stderr)
     print(f"  items:     {len(data['items'])}", file=sys.stderr)
-
-
-def main():
-    build()
-
-
-if __name__ == "__main__":
-    main()

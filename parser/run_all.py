@@ -5,18 +5,18 @@ Single entry point for the full data pipeline.
     python3 parser/run_all.py
 
 Steps:
-  1. Scrape master pages  → data/tpdp_data.json
-  2. Enrich per-puppet pages (detail scraper, ~600 requests)
-  3. Download sprites (sprite downloader, ~850 files)
+  1. Scrape master pages       → data/tpdp_data.json
+  2. Enrich per-puppet pages   (detail scraper, ~600 requests)
+  3. Download sprites          (~850 files)
+  4. Build the SQLite database → data/puppetdex.db
 """
 
 import json
 import sys
 from pathlib import Path
 
-from scrape_tpdp import scrape_all
-from scrape_puppet_details import enrich_all
-from download_sprites import download_all_sprites
+from scrape import scrape_all, enrich_all, download_all_sprites
+import build_db
 
 DATA_PATH = Path(__file__).parent.parent / "data" / "tpdp_data.json"
 
@@ -34,6 +34,9 @@ def main():
 
     print("Step 3: Download sprites", file=sys.stderr)
     download_all_sprites(DATA_PATH)
+
+    print("Step 4: Build SQLite database", file=sys.stderr)
+    build_db.build()
 
     print("Pipeline complete.", file=sys.stderr)
 
