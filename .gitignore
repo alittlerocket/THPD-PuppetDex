@@ -10,7 +10,7 @@ venv/
 .vscode/
 node_modules/
 package/
-gui/static/
+build/
 
 gui/.env
 gui/.env.*

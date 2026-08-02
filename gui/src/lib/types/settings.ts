@@ -1,6 +1,4 @@
-/** Persistent, cross-session app settings (distinct from per-session dex state). */
 export interface AppSettings {
-  /** Puppets rendered per page on the dex list. 0 means "all on one page". */
   pageSize: number;
 }
 

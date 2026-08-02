@@ -29,13 +29,6 @@ deno install
 deno task tauri dev
 ```
 
-## Building a release binary
-
-```bash
-cd gui
-deno task tauri build
-```
-
 ## Updating the data
 
 Re-run `python3 parser/run_all.py` any time the wiki changes. Each step (scrape, enrich, sprites, build DB) is also individually importable from `parser/scrape.py` and `parser/build_db.py`
