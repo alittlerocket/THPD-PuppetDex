@@ -1,0 +1,5 @@
+{
+  "imports": {
+    "@tauri-apps/plugin-sql": "npm:@tauri-apps/plugin-sql@^2.4.0"
+  }
+}

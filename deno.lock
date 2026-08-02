@@ -1,0 +1,22 @@
+{
+  "version": "5",
+  "specifiers": {
+    "npm:@tauri-apps/plugin-sql@^2.4.0": "2.4.0"
+  },
+  "npm": {
+    "@tauri-apps/api@2.11.1": {
+      "integrity": "sha512-M2FPuYND2m+wh5hfW9ZpSdxMPdEJovPBWwoHJmwUpysTYNHaOkVFN419m/K0LIgjb/7KU2vBgsUepJWugQCvAA=="
+    },
+    "@tauri-apps/plugin-sql@2.4.0": {
+      "integrity": "sha512-SIICc5JlnK6OrBZzOw7MmhXHPlmASpt5zLWIu10WW4kLr5cDYOXHdV2MoCgYQkgZLQfyBYgF3SQa5XCisUiQkw==",
+      "dependencies": [
+        "@tauri-apps/api"
+      ]
+    }
+  },
+  "workspace": {
+    "dependencies": [
+      "npm:@tauri-apps/plugin-sql@^2.4.0"
+    ]
+  }
+}

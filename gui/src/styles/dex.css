@@ -1,0 +1,371 @@
+.dex-page {
+  min-height: 100vh;
+  padding: 1rem 1.5rem 2rem;
+}
+
+.dex-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.dex-page .back {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ff1493;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+
+.dex-page .back:hover {
+  background: rgba(255, 20, 147, 0.15);
+}
+
+.dex-title {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-size: 1.75rem;
+  white-space: nowrap;
+}
+
+.search-input {
+  flex: 1;
+  max-width: 320px;
+  padding: 0.5rem 0.8rem;
+  border: 1px solid #ff1493;
+  background: rgba(255, 20, 147, 0.05);
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+.search-input:focus {
+  outline: none;
+  background: rgba(255, 20, 147, 0.12);
+}
+
+.toggle-filters {
+  padding: 0.5rem 1rem;
+  border: 1px solid #00ff7f;
+  background: rgba(0, 255, 127, 0.05);
+  color: #fff;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.toggle-filters:hover {
+  background: rgba(0, 255, 127, 0.15);
+}
+
+.result-count {
+  margin-left: auto;
+  font-size: 0.85rem;
+  color: #999;
+  white-space: nowrap;
+}
+
+.filter-panel {
+  border: 1px solid #333;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) minmax(260px, 2fr);
+  gap: 1.5rem;
+}
+
+.filter-section h3 {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #ff1493;
+  margin-bottom: 0.6rem;
+}
+
+.stat-row {
+  display: grid;
+  grid-template-columns: 70px 1fr 1fr;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+
+.stat-row label {
+  font-size: 0.8rem;
+  color: #ccc;
+}
+
+.stat-row input {
+  width: 100%;
+  padding: 0.3rem 0.4rem;
+  border: 1px solid #444;
+  background: #111;
+  color: #fff;
+  font-size: 0.8rem;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.75rem 1.25rem;
+}
+
+.filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.filter-field label {
+  font-size: 0.75rem;
+  color: #ccc;
+}
+
+.filter-field input {
+  padding: 0.4rem 0.5rem;
+  border: 1px solid #444;
+  background: #111;
+  color: #fff;
+  font-size: 0.85rem;
+}
+
+.filter-field input:focus {
+  outline: none;
+  border-color: #ff1493;
+}
+
+.custom-select {
+  position: relative;
+}
+
+.custom-select-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid #444;
+  background: #111;
+  color: #fff;
+  font-size: 0.85rem;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.custom-select-trigger:hover {
+  border-color: #666;
+}
+
+.custom-select-trigger:focus {
+  outline: none;
+  border-color: #ff1493;
+}
+
+.custom-select-trigger.placeholder-text {
+  color: #777;
+}
+
+.custom-select-trigger svg {
+  flex-shrink: 0;
+  color: #ff1493;
+}
+
+.custom-autocomplete-input::placeholder {
+  color: #777;
+}
+
+.custom-select-list {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 20;
+  max-height: 260px;
+  overflow-y: auto;
+  list-style: none;
+  border: 1px solid #ff1493;
+  background: #111;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+}
+
+.custom-select-list li {
+  display: block;
+}
+
+.custom-select-list button {
+  display: block;
+  width: 100%;
+  padding: 0.4rem 0.6rem;
+  border: none;
+  background: transparent;
+  color: #fff;
+  font-size: 0.82rem;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.custom-select-list button:hover {
+  background: rgba(255, 20, 147, 0.2);
+}
+
+.custom-select-list button.selected {
+  background: rgba(255, 20, 147, 0.35);
+}
+
+.filter-field.range {
+  grid-column: span 2;
+  flex-direction: row;
+  gap: 0.75rem;
+  align-items: flex-end;
+}
+
+.filter-field.range > div {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.filter-field.range input {
+  width: 100%;
+}
+
+.filter-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  border-top: 1px solid #333;
+  padding-top: 0.75rem;
+}
+
+.filter-actions button {
+  padding: 0.5rem 1.25rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.apply-btn {
+  border: 1px solid #ff1493;
+  background: rgba(255, 20, 147, 0.15);
+  color: #fff;
+}
+
+.apply-btn:hover {
+  background: rgba(255, 20, 147, 0.3);
+}
+
+.reset-btn {
+  border: 1px solid #555;
+  background: transparent;
+  color: #aaa;
+}
+
+.reset-btn:hover {
+  border-color: #888;
+  color: #fff;
+}
+
+.status {
+  padding: 3rem;
+  text-align: center;
+  color: #777;
+}
+
+.status.error {
+  color: #ff4444;
+}
+
+.loading-gif {
+  image-rendering: pixelated;
+  max-width: 160px;
+}
+
+.puppet-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.75rem;
+}
+
+.puppet-card {
+  border: 1px solid #222;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 0.6rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  transition: border-color 0.15s;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.puppet-card:hover {
+  border-color: #ff1493;
+}
+
+.puppet-card img {
+  image-rendering: pixelated;
+  max-width: 72px;
+  max-height: 72px;
+}
+
+.puppet-card .no-sprite {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #444;
+  border: 1px dashed #333;
+}
+
+.puppet-name {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.puppet-types {
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.type-badge {
+  font-size: 0.58rem;
+  font-weight: 700;
+  padding: 0.1rem 0.35rem;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  letter-spacing: 0.03em;
+}
+
+.puppet-meta {
+  font-size: 0.62rem;
+  color: #888;
+  display: flex;
+  gap: 0.5rem;
+}
