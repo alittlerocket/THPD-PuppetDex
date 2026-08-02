@@ -18,8 +18,9 @@ class WikiClient:
     BASE = "https://tpdp.miraheze.org"
     API  = f"{BASE}/w/api.php"
     SPR  = f"{BASE}/wiki/Special:FilePath/"
-    UA   = ("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
-            "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+    UA   = ("THPD-Puppetdex/0.1 "
+            "(+https://github.com/alittlerocket/THPD-PuppetDex) "
+            "Python-urllib")
 
     def fetch_wikitext(self, title: str) -> str | None:
         """Fetch raw wikitext for a wiki page. Returns None if not found."""

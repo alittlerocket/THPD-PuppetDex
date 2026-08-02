@@ -1,6 +1,9 @@
 .DS_Store
 Thumbs.db
-/data/
+/data/*
+!/data/tpdp_data.json
+!/data/sprites/
+!/data/animations/
 __pycache__/
 *.pyc
 .venv/

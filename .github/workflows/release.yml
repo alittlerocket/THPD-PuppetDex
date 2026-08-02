@@ -6,36 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  data:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      # Sprites change rarely; run_all.py skips any already on disk.
-      - uses: actions/cache@v4
-        with:
-          path: data/sprites
-          key: sprites-${{ hashFiles('parser/*.py') }}
-          restore-keys: sprites-
-
-      - name: Scrape wiki and build database
-        run: python3 parser/run_all.py
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: puppetdex-data
-          path: |
-            data/puppetdex.db
-            data/sprites
-            data/animations
-          retention-days: 1
-
   build:
-    needs: data
     permissions:
       contents: write
     strategy:
@@ -51,17 +22,28 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/setup-python@v5
         with:
-          name: puppetdex-data
-          path: data
+          python-version: '3.12'
+
+      # tpdp_data.json and the sprites are committed, so this only converts the
+      # JSON into SQLite -- no network access. A release must not depend on the
+      # wiki being reachable, and re-scraping on every run (including every
+      # retried run) would put hundreds of needless requests on a
+      # volunteer-run site.
+      - name: Build database from committed data
+        run: python3 parser/run_all.py --db-only
+
+      # gui/static holds symlinks into data/, which Windows checkouts
+      # materialise as plain text files. Replacing them with real copies
+      # behaves identically on every runner.
       - name: Stage static assets
         shell: bash
         run: |
           rm -rf gui/static/sprites gui/static/funky-cirno.gif
           cp -r data/sprites gui/static/sprites
           cp data/animations/funky-cirno.gif gui/static/funky-cirno.gif
-          test -f data/puppetdex.db || { echo "database missing"; exit 1; }
+          test -f data/puppetdex.db || { echo "database was not built"; exit 1; }
 
       - uses: denoland/setup-deno@v2
         with:
