@@ -4,10 +4,20 @@ export interface PuppetListRow {
   name: string;
   type1: string | null;
   type2: string | null;
+  hp: number | null;
+  fo_atk: number | null;
+  fo_def: number | null;
+  sp_atk: number | null;
+  sp_def: number | null;
+  spd: number | null;
   bst: number | null;
   cost: number | null;
   is_mod: number;
   sprite_normal: string | null;
+  // One pair per filtered move, positionally matching PuppetFilters.moves: the
+  // level the puppet learns it at, and/or the skill card number that teaches it.
+  [moveCol: `move_level_${number}`]: string | null;
+  [moveCol: `move_sc_${number}`]: string | null;
 }
 
 export interface PuppetRow {

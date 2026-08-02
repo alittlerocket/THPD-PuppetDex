@@ -31,3 +31,66 @@ h1 {
   font-weight: 700;
   letter-spacing: 0.1em;
 }
+
+.settings-panel {
+  width: 100%;
+  max-width: 560px;
+  border: 1px solid #333;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 1.25rem;
+}
+
+.settings-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.settings-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.settings-name {
+  font-size: 0.9rem;
+  color: #fff;
+}
+
+.settings-hint {
+  font-size: 0.75rem;
+  color: #888;
+  line-height: 1.5;
+}
+
+.settings-control {
+  width: 170px;
+  flex-shrink: 0;
+}
+
+.settings-status {
+  margin-top: 1rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #00ff7f;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.settings-status.visible {
+  opacity: 1;
+}
+
+@media (max-width: 560px) {
+  .settings-row {
+    flex-direction: column;
+  }
+
+  .settings-control {
+    width: 100%;
+  }
+}

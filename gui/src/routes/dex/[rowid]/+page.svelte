@@ -124,7 +124,7 @@
                 {/if}
               </div>
             {/if}
-            {#if vm.puppet.ability2}a/
+            {#if vm.puppet.ability2}
               <div class="ability-block">
                 <span class="ability-tag">{vm.puppet.ability2}</span>
                 {#if vm.abilityInfo[vm.puppet.ability2]}

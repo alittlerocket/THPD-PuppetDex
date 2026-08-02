@@ -1,3 +1,5 @@
+import { STAT_COLUMN_ORDER, type StatColumn } from '$lib/utils/statConstants';
+
 export interface PuppetFilters {
   hpMin: number | null; hpMax: number | null;
   foAtkMin: number | null; foAtkMax: number | null;
@@ -10,7 +12,7 @@ export interface PuppetFilters {
   ability: string;
   isMod: string;
   location: string;
-  move: string;
+  moves: string[];
   type: string;
   style: string;
 }
@@ -28,7 +30,7 @@ export function emptyFilters(): PuppetFilters {
     ability: '',
     isMod: 'all',
     location: '',
-    move: '',
+    moves: [],
     type: '',
     style: '',
   };
@@ -39,4 +41,25 @@ export interface FilterOptions {
   locations: string[];
   moves: string[];
   types: string[];
+}
+
+// Maps each range-filterable puppet column to its [min, max] filter fields, so
+// the dex list can work out which stats the user is currently filtering on.
+export const STAT_FILTER_RANGE: Record<StatColumn, [keyof PuppetFilters, keyof PuppetFilters]> = {
+  hp: ['hpMin', 'hpMax'],
+  fo_atk: ['foAtkMin', 'foAtkMax'],
+  fo_def: ['foDefMin', 'foDefMax'],
+  sp_atk: ['spAtkMin', 'spAtkMax'],
+  sp_def: ['spDefMin', 'spDefMax'],
+  spd: ['spdMin', 'spdMax'],
+  bst: ['bstMin', 'bstMax'],
+  cost: ['costMin', 'costMax'],
+};
+
+/** The stat columns with at least one bound set — these get shown on each card. */
+export function activeStatColumns(filters: PuppetFilters): StatColumn[] {
+  return STAT_COLUMN_ORDER.filter((col) => {
+    const [minKey, maxKey] = STAT_FILTER_RANGE[col];
+    return filters[minKey] !== null || filters[maxKey] !== null;
+  });
 }

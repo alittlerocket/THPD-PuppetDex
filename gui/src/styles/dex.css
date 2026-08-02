@@ -59,6 +59,39 @@
   background: rgba(0, 255, 127, 0.15);
 }
 
+.sort-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sort-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #888;
+  white-space: nowrap;
+}
+
+.sort-select {
+  min-width: 120px;
+}
+
+.sort-dir {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #444;
+  background: #111;
+  color: #ff1493;
+  font-size: 0.9rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.sort-dir:hover {
+  border-color: #ff1493;
+  color: #fff;
+}
+
 .result-count {
   margin-left: auto;
   font-size: 0.85rem;
@@ -145,6 +178,43 @@ input[type='number']::-webkit-inner-spin-button {
 .filter-field input:focus {
   outline: none;
   border-color: #ff1493;
+}
+
+.custom-multi {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.multi-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.multi-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.15rem 0.35rem 0.15rem 0.5rem;
+  border: 1px solid #ff1493;
+  background: rgba(255, 20, 147, 0.15);
+  color: #fff;
+  font-size: 0.7rem;
+}
+
+.multi-chip-x {
+  border: none;
+  background: transparent;
+  color: #ff9ec7;
+  font-size: 0.85rem;
+  line-height: 1;
+  padding: 0 0.1rem;
+  cursor: pointer;
+}
+
+.multi-chip-x:hover {
+  color: #fff;
 }
 
 .custom-select {
@@ -318,21 +388,31 @@ input[type='number']::-webkit-inner-spin-button {
   text-decoration: none;
   color: inherit;
   cursor: pointer;
+  /* Every sprite is an animated GIF and the grid holds ~860 of them, so
+     offscreen cards would otherwise keep decoding frames forever. Skipping
+     their rendering work stops that and cuts idle CPU; the intrinsic size
+     keeps the scrollbar honest for cards that haven't been laid out yet. */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 180px;
 }
 
 .puppet-card:hover {
   border-color: #ff1493;
 }
 
+/* Sprites range from 42x52 to 209x159 in the source data. A fixed slot plus
+   object-fit: contain scales every one to the same visual footprint while
+   preserving its aspect ratio, so nothing is stretched. */
 .puppet-card img {
   image-rendering: pixelated;
-  max-width: 72px;
-  max-height: 72px;
+  width: 100%;
+  height: 84px;
+  object-fit: contain;
 }
 
 .puppet-card .no-sprite {
   width: 64px;
-  height: 64px;
+  height: 84px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -368,4 +448,108 @@ input[type='number']::-webkit-inner-spin-button {
   color: #888;
   display: flex;
   gap: 0.5rem;
+}
+
+/* Stats the user is actively filtering on, surfaced per card. */
+.puppet-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(38px, 1fr));
+  gap: 0.15rem 0.3rem;
+  width: 100%;
+  border-top: 1px solid #222;
+  padding-top: 0.35rem;
+}
+
+.puppet-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.25;
+}
+
+.puppet-stat-label {
+  font-size: 0.55rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #ff9ec7;
+  white-space: nowrap;
+}
+
+.puppet-stat-value {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+/* Where each filtered move comes from (level up and/or skill card). */
+.puppet-moves {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  width: 100%;
+  border-top: 1px solid #222;
+  padding-top: 0.35rem;
+}
+
+.puppet-move {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+}
+
+.puppet-move-name {
+  font-size: 0.58rem;
+  color: #888;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.puppet-move-source {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #00ff7f;
+  white-space: nowrap;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #222;
+}
+
+.page-btn {
+  padding: 0.4rem 0.8rem;
+  border: 1px solid #444;
+  background: #111;
+  color: #ccc;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.page-btn:hover:not(:disabled) {
+  border-color: #ff1493;
+  color: #fff;
+}
+
+.page-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.page-status {
+  font-size: 0.8rem;
+  color: #ccc;
+  padding: 0 0.5rem;
+  white-space: nowrap;
+}
+
+.page-range {
+  color: #777;
 }

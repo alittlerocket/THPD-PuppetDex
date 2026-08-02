@@ -5,6 +5,16 @@ export const STAT_LABELS: Record<StatKey, string> = {
   sp_atk: 'Sp.Atk', sp_def: 'Sp.Def', spd: 'Spd',
 };
 
+// The six stats plus the two aggregate numbers — every numeric puppet column
+// that can be range-filtered, and therefore surfaced on the dex list card.
+export type StatColumn = StatKey | 'bst' | 'cost';
+
+export const STAT_COLUMN_ORDER: StatColumn[] = ['hp', 'fo_atk', 'fo_def', 'sp_atk', 'sp_def', 'spd', 'bst', 'cost'];
+
+export const STAT_COLUMN_LABELS: Record<StatColumn, string> = {
+  ...STAT_LABELS, bst: 'BST', cost: 'Cost',
+};
+
 // Scaling maxima for stat bars — computed from the true max across both base
 // puppets and alt-form stat ranges in the dataset, with headroom.
 export const STAT_MAX: Record<StatKey, number> = {

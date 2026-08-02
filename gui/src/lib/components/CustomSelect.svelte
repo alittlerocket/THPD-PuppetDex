@@ -3,10 +3,14 @@
     options,
     value = $bindable(),
     placeholder = 'Any',
+    clearable = true,
   }: {
     options: { value: string; label: string }[];
     value: string;
     placeholder?: string;
+    /** Show the placeholder as a selectable "clear" row. Off for selects
+     *  whose own option list already covers every valid value. */
+    clearable?: boolean;
   } = $props();
 
   let open = $state(false);
@@ -44,9 +48,11 @@
   </button>
   {#if open}
     <ul class="custom-select-list">
-      <li>
-        <button type="button" class:selected={!value} onclick={() => choose('')}>{placeholder}</button>
-      </li>
+      {#if clearable}
+        <li>
+          <button type="button" class:selected={!value} onclick={() => choose('')}>{placeholder}</button>
+        </li>
+      {/if}
       {#each options as opt}
         <li>
           <button type="button" class:selected={value === opt.value} onclick={() => choose(opt.value)}>

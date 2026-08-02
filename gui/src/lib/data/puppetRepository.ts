@@ -11,9 +11,46 @@ import type {
   AbilityInfo,
 } from '$lib/types/puppet';
 import type { PuppetFilters, FilterOptions } from '$lib/types/filters';
+import { DEFAULT_SORT_KEY, type SortDir, type SortKey } from '$lib/utils/sortConstants';
 import { parseDrops } from '$lib/utils/drops';
 
-function buildPuppetListQuery(filters: PuppetFilters): { sql: string; params: unknown[] } {
+export interface PuppetSort {
+  key: SortKey;
+  dir: SortDir;
+}
+
+// Whitelist of sortable columns
+const SORT_EXPR: Record<SortKey, string> = {
+  id: 'id',
+  name: 'name COLLATE NOCASE',
+  type1: 'type1 COLLATE NOCASE',
+  hp: 'hp',
+  fo_atk: 'fo_atk',
+  fo_def: 'fo_def',
+  sp_atk: 'sp_atk',
+  sp_def: 'sp_def',
+  spd: 'spd',
+  bst: 'bst',
+  cost: 'cost',
+  // With several moves filtered, the first one is the sort subject.
+  move_level: 'CAST(move_level_0 AS INTEGER)',
+};
+
+function buildOrderBy(sort: PuppetSort, moveFilterActive: boolean): string {
+  // move_level_0 is only in the result set while filtering by a move.
+  const key =
+    SORT_EXPR[sort.key] && (sort.key !== 'move_level' || moveFilterActive)
+      ? sort.key
+      : DEFAULT_SORT_KEY;
+  const expr = SORT_EXPR[key];
+  const dir = sort.dir === 'desc' ? 'DESC' : 'ASC';
+  return `ORDER BY ${expr} IS NULL, ${expr} ${dir}, id`;
+}
+
+function buildPuppetListQuery(
+  filters: PuppetFilters,
+  sort: PuppetSort
+): { sql: string; params: unknown[] } {
   const clauses: string[] = [];
   const params: unknown[] = [];
 
@@ -27,10 +64,6 @@ function buildPuppetListQuery(filters: PuppetFilters): { sql: string; params: un
     if (max !== null) clauses.push(`${col} <= ${ph(max)}`);
   }
 
-  // Hide alt-form rows (name ends with '*') from search when their base
-  // (non-starred) counterpart exists — reachable instead via the "Alt Form"
-  // pills on the base puppet's detail page. If no counterpart exists (e.g.
-  // Hecatia's forms), leave it visible since it's the only way to find it.
   clauses.push(`
     NOT (
       name LIKE '%*' AND EXISTS (
@@ -65,9 +98,10 @@ function buildPuppetListQuery(filters: PuppetFilters): { sql: string; params: un
     );
   }
 
-  if (filters.move) {
-    const p1 = ph(filters.move);
-    const p2 = ph(filters.move);
+
+  for (const move of filters.moves) {
+    const p1 = ph(move);
+    const p2 = ph(move);
     clauses.push(`(
       EXISTS (SELECT 1 FROM puppet_learnset ls WHERE ls.puppet_rowid = puppets.rowid AND ls.name = ${p1})
       OR EXISTS (SELECT 1 FROM puppet_skill_cards sc WHERE sc.puppet_rowid = puppets.rowid AND sc.name = ${p2})
@@ -85,21 +119,40 @@ function buildPuppetListQuery(filters: PuppetFilters): { sql: string; params: un
     clauses.push(`name LIKE ${p}`);
   }
 
+  // Surface where each filtered move comes from: the earliest level it's
+  // learned at, and/or the skill card that teaches it.
+  const moveCols = filters.moves
+    .map((move, i) => {
+      const p1 = ph(move);
+      const p2 = ph(move);
+      return `,
+      (SELECT ls.level FROM puppet_learnset ls
+        WHERE ls.puppet_rowid = puppets.rowid AND ls.name = ${p1}
+        ORDER BY CAST(ls.level AS INTEGER) LIMIT 1) AS move_level_${i},
+      (SELECT sc.sc FROM puppet_skill_cards sc
+        WHERE sc.puppet_rowid = puppets.rowid AND sc.name = ${p2}
+        LIMIT 1) AS move_sc_${i}`;
+    })
+    .join('');
+
   const where = clauses.length ? `WHERE ${clauses.join(' AND ')}` : '';
   const sql = `
-    SELECT rowid, id, name, type1, type2, bst, cost, is_mod, sprite_normal
+    SELECT rowid, id, name, type1, type2,
+           hp, fo_atk, fo_def, sp_atk, sp_def, spd, bst, cost,
+           is_mod, sprite_normal${moveCols}
     FROM puppets
     ${where}
-    ORDER BY id, name
+    ${buildOrderBy(sort, filters.moves.length > 0)}
   `;
   return { sql, params };
 }
 
 export async function fetchPuppetList(
   db: Database,
-  filters: PuppetFilters
+  filters: PuppetFilters,
+  sort: PuppetSort
 ): Promise<PuppetListRow[]> {
-  const { sql, params } = buildPuppetListQuery(filters);
+  const { sql, params } = buildPuppetListQuery(filters, sort);
   return db.select<PuppetListRow[]>(sql, params);
 }
 

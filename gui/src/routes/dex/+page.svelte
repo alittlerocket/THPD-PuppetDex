@@ -6,6 +6,7 @@
   import { STYLES } from '$lib/utils/styleUtils';
   import CustomSelect from '$lib/components/CustomSelect.svelte';
   import CustomAutocomplete from '$lib/components/CustomAutocomplete.svelte';
+  import CustomMultiAutocomplete from '$lib/components/CustomMultiAutocomplete.svelte';
   import '../../styles/global.css';
   import '../../styles/dex.css';
 
@@ -26,6 +27,24 @@
     <button class="toggle-filters" onclick={() => vm.toggleFilters()}>
       {vm.showFilters ? 'Hide Filters' : 'Advanced Filters'}
     </button>
+    <div class="sort-controls">
+      <span class="sort-label">Sort</span>
+      <div class="sort-select">
+        <CustomSelect
+          options={vm.sortOptions}
+          bind:value={vm.sortKey}
+          placeholder="ID"
+          clearable={false}
+        />
+      </div>
+      <button
+        class="sort-dir"
+        title={vm.sortDir === 'asc' ? 'Ascending' : 'Descending'}
+        onclick={() => vm.toggleSortDir()}
+      >
+        {vm.sortDir === 'asc' ? '↑' : '↓'}
+      </button>
+    </div>
     {#if !vm.loading && !vm.error}
       <span class="result-count">{vm.filtered.length} / {vm.puppets.length}</span>
     {/if}
@@ -113,8 +132,12 @@
           </div>
 
           <div class="filter-field">
-            <label for="move">Can Learn Move</label>
-            <CustomAutocomplete options={vm.moveOptions} bind:value={vm.filters.move} />
+            <label for="move">Can Learn Moves</label>
+            <CustomMultiAutocomplete
+              options={vm.moveOptions}
+              bind:values={vm.filters.moves}
+              placeholder="Add a move..."
+            />
           </div>
 
           <div class="filter-field">
@@ -151,7 +174,7 @@
     <p class="status error">{vm.error}</p>
   {:else}
     <div class="puppet-grid">
-      {#each vm.filtered as puppet (puppet.rowid)}
+      {#each vm.paged as puppet (puppet.rowid)}
         <a class="puppet-card" href="/dex/{puppet.rowid}">
           {#if puppet.sprite_normal}
             <img src="/sprites/{puppet.sprite_normal}" alt={puppet.name} loading="lazy" />
@@ -168,11 +191,56 @@
             {/if}
           </div>
           <div class="puppet-meta">
-            {#if puppet.bst}<span>BST {puppet.bst}</span>{/if}
-            {#if puppet.cost}<span>Cost {puppet.cost}</span>{/if}
+            {#if puppet.bst && vm.showBstInMeta}<span>BST {puppet.bst}</span>{/if}
+            {#if puppet.cost && vm.showCostInMeta}<span>Cost {puppet.cost}</span>{/if}
           </div>
+          {#if vm.statColumns.length > 0}
+            <div class="puppet-stats">
+              {#each vm.statColumns as col}
+                <div class="puppet-stat">
+                  <span class="puppet-stat-label">{col.label}</span>
+                  <span class="puppet-stat-value">{vm.statValue(puppet, col.key)}</span>
+                </div>
+              {/each}
+            </div>
+          {/if}
+          {#if vm.moveFilterActive}
+            <div class="puppet-moves">
+              {#each vm.moveInfos(puppet) as mv}
+                <div class="puppet-move">
+                  <span class="puppet-move-name">{mv.name}</span>
+                  <span class="puppet-move-source">{mv.source}</span>
+                </div>
+              {/each}
+            </div>
+          {/if}
         </a>
       {/each}
     </div>
+
+    {#if vm.paginated}
+      <div class="pagination">
+        <button class="page-btn" disabled={vm.currentPage === 1} onclick={() => vm.firstPage()}>«</button>
+        <button class="page-btn" disabled={vm.currentPage === 1} onclick={() => vm.prevPage()}>‹ Prev</button>
+        <span class="page-status">
+          Page {vm.currentPage} of {vm.pageCount}
+          <span class="page-range">({vm.rangeStart}–{vm.rangeEnd} of {vm.filtered.length})</span>
+        </span>
+        <button
+          class="page-btn"
+          disabled={vm.currentPage === vm.pageCount}
+          onclick={() => vm.nextPage()}
+        >
+          Next ›
+        </button>
+        <button
+          class="page-btn"
+          disabled={vm.currentPage === vm.pageCount}
+          onclick={() => vm.lastPage()}
+        >
+          »
+        </button>
+      </div>
+    {/if}
   {/if}
 </div>
