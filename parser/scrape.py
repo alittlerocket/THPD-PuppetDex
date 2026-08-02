@@ -546,7 +546,7 @@ def parse_mod_section(content: str) -> dict:
 #  Per-puppet enrich helpers
 
 def _checkpoint(data: dict, path: Path, done: int) -> None:
-    with open(path, "w") as f:
+    with open(path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False)
     print(f"  checkpoint: {done} pages done", file=sys.stderr)
 
@@ -653,7 +653,7 @@ def _enrich_one_mod_page(
 
 def enrich_all(data_path: Path = DATA_PATH) -> None:
     """Load the JSON at data_path, enrich all puppets with per-page detail, and save back."""
-    with open(data_path) as f:
+    with open(data_path, encoding="utf-8") as f:
         data = json.load(f)
 
     total_done = 0
@@ -681,7 +681,7 @@ def enrich_all(data_path: Path = DATA_PATH) -> None:
         if total_done % 50 == 0:
             _checkpoint(data, data_path, total_done)
 
-    with open(data_path, "w") as f:
+    with open(data_path, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
     print(f"Done. {total} pages fetched. Saved to {data_path}", file=sys.stderr)
 
@@ -769,7 +769,7 @@ def download_all_sprites(data_path: Path = DATA_PATH) -> None:
     """Download all sprites and rewrite the JSON at data_path with local filenames."""
     SPRITES_DIR.mkdir(parents=True, exist_ok=True)
 
-    with open(data_path) as f:
+    with open(data_path, encoding="utf-8") as f:
         d = json.load(f)
 
     _rebuild_variant_urls(d)
@@ -781,6 +781,6 @@ def download_all_sprites(data_path: Path = DATA_PATH) -> None:
 
     _rewrite_filenames(d)
 
-    with open(data_path, "w") as f:
+    with open(data_path, "w", encoding="utf-8") as f:
         json.dump(d, f, indent=2, ensure_ascii=False)
     print(f"JSON updated: {data_path}", file=sys.stderr)

@@ -198,7 +198,7 @@ def _insert_puppet_details(cur: sqlite3.Cursor, rowid: int, p: dict) -> None:
 
 
 def build(data_json: Path = DATA_JSON, data_db: Path = DATA_DB) -> None:
-    with open(data_json) as f:
+    with open(data_json, encoding="utf-8") as f:
         data = json.load(f)
 
     data_db.unlink(missing_ok=True)
