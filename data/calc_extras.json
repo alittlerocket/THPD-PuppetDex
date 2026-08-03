@@ -1,0 +1,990 @@
+{
+ "_source": "Curated damage-calculator data that the TPDP wiki does not publish, from tpdpextcalc (https://github.com/Gengetsu12/tpdpextcalc), MIT (c) 2013-2018 Honko and other contributors. Everything derivable from the scraped dex (type, category, power, accuracy, class, priority) is NOT stored here -- parser/build_db.py derives it from the skills table. Only mechanical flags with no dex equivalent, plus names the dex lacks, are kept.",
+ "type_chart": {
+  "None": {
+   "None": 1,
+   "Void": 1,
+   "Fire": 1,
+   "Water": 1,
+   "Nature": 1,
+   "Earth": 1,
+   "Steel": 1,
+   "Wind": 1,
+   "Electric": 1,
+   "Light": 1,
+   "Dark": 1,
+   "Nether": 1,
+   "Poison": 1,
+   "Fighting": 1,
+   "Illusion": 1,
+   "Sound": 1,
+   "Warped": 1,
+   "Dream": 1
+  },
+  "Void": {
+   "None": 1,
+   "Void": 1,
+   "Fire": 1,
+   "Water": 1,
+   "Nature": 1,
+   "Earth": 1,
+   "Steel": 1,
+   "Wind": 1,
+   "Electric": 1,
+   "Light": 0.5,
+   "Dark": 0.5,
+   "Nether": 1,
+   "Poison": 1,
+   "Fighting": 1,
+   "Illusion": 0,
+   "Sound": 1,
+   "Warped": 1,
+   "Dream": 1
+  },
+  "Fire": {
+   "None": 1,
+   "Void": 1,
+   "Fire": 0.5,
+   "Water": 0.5,
+   "Nature": 2,
+   "Earth": 0.5,
+   "Steel": 2,
+   "Wind": 1,
+   "Electric": 1,
+   "Light": 1,
+   "Dark": 1,
+   "Nether": 1,
+   "Poison": 1,
+   "Fighting": 1,
+   "Illusion": 1,
+   "Sound": 1,
+   "Warped": 1,
+   "Dream": 1
+  },
+  "Water": {
+   "None": 1,
+   "Void": 1,
+   "Fire": 2,
+   "Water": 0.5,
+   "Nature": 0.5,
+   "Earth": 2,
+   "Steel": 1,
+   "Wind": 1,
+   "Electric": 1,
+   "Light": 1,
+   "Dark": 1,
+   "Nether": 1,
+   "Poison": 1,
+   "Fighting": 1,
+   "Illusion": 1,
+   "Sound": 0.5,
+   "Warped": 1,
+   "Dream": 1
+  },
+  "Nature": {
+   "None": 1,
+   "Void": 1,
+   "Fire": 0.5,
+   "Water": 2,
+   "Nature": 0.5,
+   "Earth": 2,
+   "Steel": 1,
+   "Wind": 0.5,
+   "Electric": 1,
+   "Light": 1,
+   "Dark": 1,
+   "Nether": 1,
+   "Poison": 0.5,
+   "Fighting": 1,
+   "Illusion": 1,
+   "Sound": 1,
+   "Warped": 1,
+   "Dream": 1
+  },
+  "Earth": {
+   "None": 1,
+   "Void": 1,
+   "Fire": 2,
+   "Water": 1,
+   "Nature": 0.5,
+   "Earth": 1,
+   "Steel": 2,
+   "Wind": 0,
+   "Electric": 2,
+   "Light": 1,
+   "Dark": 1,
+   "Nether": 1,
+   "Poison": 2,
+   "Fighting": 0.5,
+   "Illusion": 1,
+   "Sound": 1,
+   "Warped": 1,
+   "Dream": 1
+  },
+  "Steel": {
+   "None": 1,
+   "Void": 1,
+   "Fire": 0.5,
+   "Water": 0.5,
+   "Nature": 2,
+   "Earth": 1,
+   "Steel": 0.5,
+   "Wind": 2,
+   "Electric": 1,
+   "Light": 1,
+   "Dark": 2,
+   "Nether": 1,
+   "Poison": 1,
+   "Fighting": 1,
+   "Illusion": 1,
+   "Sound": 1,
+   "Warped": 0.5,
+   "Dream": 1
+  },
+  "Wind": {
+   "None": 1,
+   "Void": 1,
+   "Fire": 1,
+   "Water": 1,
+   "Nature": 1,
+   "Earth": 1,
+   "Steel": 0.5,
+   "Wind": 1,
+   "Electric": 0.5,
+   "Light": 1,
+   "Dark": 1,
+   "Nether": 1,
+   "Poison": 2,
+   "Fighting": 2,
+   "Illusion": 1,
+   "Sound": 2,
+   "Warped": 0,
+   "Dream": 1
+  },
+  "Electric": {
+   "None": 1,
+   "Void": 1,
+   "Fire": 1,
+   "Water": 2,
+   "Nature": 0.5,
+   "Earth": 0,
+   "Steel": 1,
+   "Wind": 2,
+   "Electric": 0.5,
+   "Light": 0.5,
+   "Dark": 1,
+   "Nether": 1,
+   "Poison": 1,
+   "Fighting": 1,
+   "Illusion": 1,
+   "Sound": 2,
+   "Warped": 1,
+   "Dream": 1
+  },
+  "Light": {
+   "None": 1,
+   "Void": 1,
+   "Fire": 1,
+   "Water": 0.5,
+   "Nature": 0.5,
+   "Earth": 1,
+   "Steel": 1,
+   "Wind": 1,
+   "Electric": 1,
+   "Light": 0.5,
+   "Dark": 2,
+   "Nether": 2,
+   "Poison": 1,
+   "Fighting": 1,
+   "Illusion": 0.5,
+   "Sound": 1,
+   "Warped": 1,
+   "Dream": 1
+  },
+  "Dark": {
+   "None": 1,
+   "Void": 2,
+   "Fire": 1,
+   "Water": 1,
+   "Nature": 1,
+   "Earth": 1,
+   "Steel": 1,
+   "Wind": 1,
+   "Electric": 1,
+   "Light": 2,
+   "Dark": 0.5,
+   "Nether": 2,
+   "Poison": 1,
+   "Fighting": 0.5,
+   "Illusion": 0.5,
+   "Sound": 1,
+   "Warped": 1,
+   "Dream": 1
+  },
+  "Nether": {
+   "None": 1,
+   "Void": 1,
+   "Fire": 1,
+   "Water": 1,
+   "Nature": 1,
+   "Earth": 1,
+   "Steel": 1,
+   "Wind": 1,
+   "Electric": 1,
+   "Light": 0.5,
+   "Dark": 1,
+   "Nether": 2,
+   "Poison": 1,
+   "Fighting": 1,
+   "Illusion": 1,
+   "Sound": 0.5,
+   "Warped": 1,
+   "Dream": 1
+  },
+  "Poison": {
+   "None": 1,
+   "Void": 1,
+   "Fire": 1,
+   "Water": 2,
+   "Nature": 2,
+   "Earth": 0.5,
+   "Steel": 0,
+   "Wind": 1,
+   "Electric": 1,
+   "Light": 1,
+   "Dark": 1,
+   "Nether": 0.5,
+   "Poison": 0.5,
+   "Fighting": 1,
+   "Illusion": 1,
+   "Sound": 1,
+   "Warped": 2,
+   "Dream": 1
+  },
+  "Fighting": {
+   "None": 1,
+   "Void": 1,
+   "Fire": 1,
+   "Water": 1,
+   "Nature": 1,
+   "Earth": 2,
+   "Steel": 2,
+   "Wind": 0.5,
+   "Electric": 1,
+   "Light": 1,
+   "Dark": 2,
+   "Nether": 0,
+   "Poison": 0.5,
+   "Fighting": 1,
+   "Illusion": 0.5,
+   "Sound": 1,
+   "Warped": 2,
+   "Dream": 1
+  },
+  "Illusion": {
+   "None": 1,
+   "Void": 0,
+   "Fire": 1,
+   "Water": 1,
+   "Nature": 1,
+   "Earth": 1,
+   "Steel": 0.5,
+   "Wind": 1,
+   "Electric": 1,
+   "Light": 2,
+   "Dark": 1,
+   "Nether": 0.5,
+   "Poison": 1,
+   "Fighting": 1,
+   "Illusion": 2,
+   "Sound": 1,
+   "Warped": 1,
+   "Dream": 1
+  },
+  "Sound": {
+   "None": 1,
+   "Void": 1,
+   "Fire": 1,
+   "Water": 1,
+   "Nature": 1,
+   "Earth": 1,
+   "Steel": 1,
+   "Wind": 0.5,
+   "Electric": 1,
+   "Light": 0.5,
+   "Dark": 1,
+   "Nether": 1,
+   "Poison": 1,
+   "Fighting": 2,
+   "Illusion": 2,
+   "Sound": 0.5,
+   "Warped": 2,
+   "Dream": 1
+  },
+  "Warped": {
+   "None": 1,
+   "Void": 1,
+   "Fire": 1,
+   "Water": 1,
+   "Nature": 1,
+   "Earth": 1,
+   "Steel": 2,
+   "Wind": 2,
+   "Electric": 1,
+   "Light": 1,
+   "Dark": 0.5,
+   "Nether": 1,
+   "Poison": 0.5,
+   "Fighting": 0.5,
+   "Illusion": 2,
+   "Sound": 1,
+   "Warped": 0.5,
+   "Dream": 1
+  },
+  "Dream": {
+   "None": 1,
+   "Void": 1,
+   "Fire": 1,
+   "Water": 1,
+   "Nature": 1,
+   "Earth": 1,
+   "Steel": 1,
+   "Wind": 1,
+   "Electric": 1,
+   "Light": 1,
+   "Dark": 1,
+   "Nether": 1,
+   "Poison": 1,
+   "Fighting": 1,
+   "Illusion": 1,
+   "Sound": 1,
+   "Warped": 1,
+   "Dream": 1
+  }
+ },
+ "move_flags": {
+  "(No Move)": {
+   "type": "None",
+   "category": "Status",
+   "bp": 0
+  },
+  "Firm Spirit": {
+   "willCharge": true
+  },
+  "Overskill": {
+   "hasRecoil": "number"
+  },
+  "Spirit Rush": {
+   "hasRecoil": "number"
+  },
+  "Struggle": {
+   "alwaysHits": true,
+   "hasRecoil": "number"
+  },
+  "Cruciform": {
+   "isTwoHit": true
+  },
+  "Danmaku Dance": {
+   "willLock": true
+  },
+  "Crossbow Assault": {
+   "hasSecondaryEffect": true
+  },
+  "Tri-Effect": {
+   "hasSecondaryEffect": true
+  },
+  "Destruction": {
+   "hasSecondaryEffect": true
+  },
+  "Volley": {
+   "alwaysHits": true
+  },
+  "Random Shots": {
+   "isMultiHit": true
+  },
+  "Guided Missile": {
+   "hasSecondaryEffect": true
+  },
+  "Purgatory Flicker": {
+   "hasSecondaryEffect": true,
+   "hasRecoil": "number"
+  },
+  "Holy Flare": {
+   "hasSecondaryEffect": true
+  },
+  "Burn Strike": {
+   "hasSecondaryEffect": true
+  },
+  "Exploding Blaze": {
+   "hasSecondaryEffect": true
+  },
+  "Fire Javelin": {
+   "hasSecondaryEffect": true
+  },
+  "Rising Sun": {
+   "hasSecondaryEffect": true
+  },
+  "Volcano": {
+   "dropsStats": 2
+  },
+  "Inferno": {
+   "hasSecondaryEffect": true
+  },
+  "Blaze Spear": {
+   "hasSecondaryEffect": true
+  },
+  "Blaze of Tenmei": {
+   "hasSecondaryEffect": true
+  },
+  "Fire-Dragon Spiral": {
+   "partialTrapping": true
+  },
+  "Backdraft": {
+   "hasSecondaryEffect": true
+  },
+  "Flashover": {
+   "hasSecondaryEffect": true
+  },
+  "Flame Wave": {
+   "hasSecondaryEffect": true
+  },
+  "Fire-Snake Spiral": {
+   "partialTrapping": true
+  },
+  "Fireball": {
+   "hasSecondaryEffect": true
+  },
+  "Flame Pillar": {
+   "hasSecondaryEffect": true
+  },
+  "Fiery Game": {
+   "hasSecondaryEffect": true
+  },
+  "Flare": {
+   "hasSecondaryEffect": true
+  },
+  "Ice Coffin": {
+   "hasSecondaryEffect": true
+  },
+  "Aqua Javelin": {
+   "hasSecondaryEffect": true
+  },
+  "Ice Gatling": {
+   "isMultiHit": true
+  },
+  "Cold Rain": {
+   "hasSecondaryEffect": true
+  },
+  "Ice Age": {
+   "hasSecondaryEffect": true
+  },
+  "Lazy Mist": {
+   "hasSecondaryEffect": true
+  },
+  "Geyser": {
+   "alwaysCrit": true
+  },
+  "Heavy Rain": {
+   "partialTrapping": true
+  },
+  "Frost Edge": {
+   "hasSecondaryEffect": true
+  },
+  "Snowball Fight": {
+   "hasSecondaryEffect": true
+  },
+  "Peach-Thorn Arrow": {
+   "hasRecoil": "number"
+  },
+  "Voice of Famine": {
+   "hasSecondaryEffect": true
+  },
+  "Natural Beauty": {
+   "hasSecondaryEffect": true
+  },
+  "Grass Javelin": {
+   "hasSecondaryEffect": true
+  },
+  "Power Drain": {
+   "givesHealth": true
+  },
+  "Hornet's Flit": {
+   "isMultiHit": true
+  },
+  "Sakura Blizzard": {
+   "hasSecondaryEffect": true
+  },
+  "Off-Season Bloom": {
+   "dropsStats": 2
+  },
+  "Petal Dance": {
+   "willLock": true
+  },
+  "Rainbow Flowers": {
+   "willCharge": true
+  },
+  "Pollen Mist": {
+   "hasSecondaryEffect": true
+  },
+  "Energy Absorb": {
+   "givesHealth": true
+  },
+  "Swirling Leaves": {
+   "alwaysHits": true
+  },
+  "Parasite": {
+   "givesHealth": true
+  },
+  "Seasonal Flowers": {
+   "hasSecondaryEffect": true
+  },
+  "Royal Prism": {
+   "hasSecondaryEffect": true
+  },
+  "Rock Drills": {
+   "alwaysCrit": true
+  },
+  "Spiked Stones": {
+   "hasSecondaryEffect": true
+  },
+  "Dust Cloud": {
+   "hasSecondaryEffect": true
+  },
+  "Stone Throw": {
+   "isTwoHit": true
+  },
+  "Dust Devil Gate": {
+   "partialTrapping": true
+  },
+  "Godstone Frenzy": {
+   "isMultiHit": true
+  },
+  "Waves of Earth": {
+   "hasSecondaryEffect": true
+  },
+  "Unstable Horizon": {
+   "hasSecondaryEffect": true
+  },
+  "Stone Circle": {
+   "hasSecondaryEffect": true
+  },
+  "Stone Rain": {
+   "hasSecondaryEffect": true
+  },
+  "Slingshot": {
+   "hasSecondaryEffect": true
+  },
+  "Mudslide": {
+   "hasSecondaryEffect": true
+  },
+  "Earthen Feast": {
+   "hasSecondaryEffect": true
+  },
+  "Full Metal Crash": {
+   "hasRecoil": "number"
+  },
+  "Samurai Edge": {
+   "hasSecondaryEffect": true
+  },
+  "Brandish": {
+   "hasRecoil": "number"
+  },
+  "Armor Pierce": {
+   "hasSecondaryEffect": true
+  },
+  "Killing Bite": {
+   "alwaysCrit": true
+  },
+  "Reversal Sword": {
+   "alwaysHits": true
+  },
+  "Silver Rain": {
+   "hasSecondaryEffect": true
+  },
+  "Chrome Ray": {
+   "hasSecondaryEffect": true
+  },
+  "Twin Gears": {
+   "isTwoHit": true
+  },
+  "Rapid Throw": {
+   "isMultiHit": true
+  },
+  "Metal Needle": {
+   "hasSecondaryEffect": true
+  },
+  "Hammer Bash": {
+   "hasSecondaryEffect": true
+  },
+  "Gensokyo Typhoon": {
+   "willCharge": true
+  },
+  "Foehn Winds": {
+   "hasRecoil": "number"
+  },
+  "Wind Javelin": {
+   "hasSecondaryEffect": true
+  },
+  "Wind Train": {
+   "alwaysHits": true
+  },
+  "Twister": {
+   "isMultiHit": true
+  },
+  "Great Tornado": {
+   "partialTrapping": true
+  },
+  "Macroburst": {
+   "hasSecondaryEffect": true
+  },
+  "Swift Air-Raid": {
+   "alwaysHits": true
+  },
+  "Wind Wave": {
+   "hasSecondaryEffect": true
+  },
+  "Dancing Wind": {
+   "hasSecondaryEffect": true
+  },
+  "Westerlies": {
+   "hasSecondaryEffect": true
+  },
+  "Flying Frenzy": {
+   "hasSecondaryEffect": true
+  },
+  "Spinning Air": {
+   "hasSecondaryEffect": true
+  },
+  "Thor's Hammer": {
+   "hasSecondaryEffect": true,
+   "hasRecoil": "number"
+  },
+  "Lightning Cut": {
+   "hasSecondaryEffect": true
+  },
+  "Spark Javelin": {
+   "hasSecondaryEffect": true
+  },
+  "Plasma Ball": {
+   "hasSecondaryEffect": true
+  },
+  "Thunderlord's Scorn": {
+   "hasSecondaryEffect": true
+  },
+  "Divine Thunder": {
+   "hasSecondaryEffect": true
+  },
+  "Thunder Force": {
+   "hasSecondaryEffect": true
+  },
+  "Stormcloud's Eye": {
+   "hasSecondaryEffect": true
+  },
+  "Charge Thief": {
+   "givesHealth": true
+  },
+  "Spark Cross": {
+   "hasSecondaryEffect": true
+  },
+  "Purple Lightning": {
+   "hasSecondaryEffect": true
+  },
+  "Spark Shot": {
+   "hasSecondaryEffect": true
+  },
+  "Graze Bolt": {
+   "hasSecondaryEffect": true
+  },
+  "Lightning Strike": {
+   "hasSecondaryEffect": true
+  },
+  "Energy Bolt": {
+   "hasSecondaryEffect": true
+  },
+  "Thunder Drill": {
+   "alwaysCrit": true
+  },
+  "Luminous Flux": {
+   "hasRecoil": "number"
+  },
+  "Evil-Crushing Arrow": {
+   "hasSecondaryEffect": true
+  },
+  "Atomic Energy": {
+   "givesHealth": true
+  },
+  "Light Javelin": {
+   "hasSecondaryEffect": true
+  },
+  "Arclight": {
+   "dropsStats": 2
+  },
+  "Star Flare": {
+   "hasSecondaryEffect": true
+  },
+  "Angel Ladder": {
+   "hasSecondaryEffect": true
+  },
+  "Diffusion Laser": {
+   "hasSecondaryEffect": true
+  },
+  "Dark Sphere": {
+   "hasSecondaryEffect": true
+  },
+  "Blackout": {
+   "hasSecondaryEffect": true
+  },
+  "Dark Arrow": {
+   "isTwoHit": true
+  },
+  "Dark Innocence": {
+   "isMultiHit": true
+  },
+  "Darkness Dance": {
+   "willLock": true
+  },
+  "Dark Sweets": {
+   "hasSecondaryEffect": true
+  },
+  "Infinite Darkness": {
+   "partialTrapping": true
+  },
+  "Dark Ball": {
+   "hasSecondaryEffect": true
+  },
+  "Ominous Doll": {
+   "hasSecondaryEffect": true
+  },
+  "Bad Moon": {
+   "hasSecondaryEffect": true
+  },
+  "Bloody Storm": {
+   "hasSecondaryEffect": true
+  },
+  "Venom Nova": {
+   "hasSecondaryEffect": true
+  },
+  "Dust Bomb": {
+   "hasSecondaryEffect": true
+  },
+  "Poisoned Arrow": {
+   "hasSecondaryEffect": true
+  },
+  "Venom Strike": {
+   "hasSecondaryEffect": true
+  },
+  "Poison Bomb": {
+   "hasSecondaryEffect": true
+  },
+  "Venom Fang": {
+   "hasSecondaryEffect": true
+  },
+  "Negative Mist": {
+   "alwaysHits": true
+  },
+  "Toxic Spiral": {
+   "hasSecondaryEffect": true
+  },
+  "Purple Smog": {
+   "hasSecondaryEffect": true
+  },
+  "Slime Ball": {
+   "hasSecondaryEffect": true
+  },
+  "Smog Shot": {
+   "hasSecondaryEffect": true
+  },
+  "Toxic Haze": {
+   "hasSecondaryEffect": true
+  },
+  "Depressing Rain": {
+   "alwaysHits": true
+  },
+  "Sweet Desperado": {
+   "dropsStats": 2
+  },
+  "Midnight Specter": {
+   "hasSecondaryEffect": true,
+   "hasRecoil": "number"
+  },
+  "Stalk and Murder": {
+   "alwaysHits": true,
+   "willCharge": true
+  },
+  "Shadow Javelin": {
+   "hasSecondaryEffect": true
+  },
+  "Soul Hound": {
+   "alwaysHits": true
+  },
+  "Poltergeist": {
+   "hasSecondaryEffect": true
+  },
+  "Ghost Wave": {
+   "hasSecondaryEffect": true
+  },
+  "Soul Eater": {
+   "hasSecondaryEffect": true
+  },
+  "Ghost Trick": {
+   "hasSecondaryEffect": true
+  },
+  "Specter Warning": {
+   "hasSecondaryEffect": true
+  },
+  "Soul Walking": {
+   "hasSecondaryEffect": true
+  },
+  "Play Ghost": {
+   "hasSecondaryEffect": true
+  },
+  "Specter's Waltz": {
+   "hasSecondaryEffect": true
+  },
+  "Reckless Dive": {
+   "hasRecoil": "crash"
+  },
+  "Exploding Fist": {
+   "hasSecondaryEffect": true
+  },
+  "Life Burst": {
+   "alwaysHits": true
+  },
+  "Aura Drain": {
+   "givesHealth": true
+  },
+  "Corkscrew": {
+   "hasSecondaryEffect": true
+  },
+  "GIGANTIC": {
+   "hasSecondaryEffect": true
+  },
+  "Concussion": {
+   "hasSecondaryEffect": true
+  },
+  "Understep": {
+   "hasSecondaryEffect": true
+  },
+  "Twin Thrust": {
+   "isTwoHit": true
+  },
+  "Rush Attack": {
+   "isMultiHit": true
+  },
+  "Spiral Strike": {
+   "hasSecondaryEffect": true
+  },
+  "Shooting Arts": {
+   "isMultiHit": true
+  },
+  "Revolving Illusions": {
+   "isFoul": true
+  },
+  "Ephemeral": {
+   "hasSecondaryEffect": true
+  },
+  "Flower of Hell": {
+   "hasSecondaryEffect": true
+  },
+  "Invisible Heart": {
+   "alwaysHits": true
+  },
+  "Catastrophe": {
+   "hasSecondaryEffect": true
+  },
+  "Glamor Pandemic": {
+   "hasSecondaryEffect": true
+  },
+  "Unknown Flare": {
+   "hasSecondaryEffect": true
+  },
+  "Mysterious Wave": {
+   "defenseStat": "fd"
+  },
+  "Doppleganger": {
+   "type": "Illusion",
+   "category": "Status",
+   "bp": 0,
+   "priority": 1
+  },
+  "Mirror World": {
+   "hasSecondaryEffect": true
+  },
+  "Imaginary Friend": {
+   "hasSecondaryEffect": true
+  },
+  "Detonation Burst": {
+   "dropsStats": 1
+  },
+  "High Tone Crush": {
+   "hasSecondaryEffect": true
+  },
+  "Dancing Rain": {
+   "hasSecondaryEffect": true
+  },
+  "Ultra High Tone": {
+   "hasSecondaryEffect": true
+  },
+  "Primal Noise": {
+   "hasSecondaryEffect": true
+  },
+  "Fantasy Melody": {
+   "alwaysHits": true
+  },
+  "Sorrowful Tune": {
+   "hasSecondaryEffect": true
+  },
+  "Ambient": {
+   "hasSecondaryEffect": true
+  },
+  "Waltz": {
+   "hasSecondaryEffect": true
+  },
+  "Overdrive": {
+   "dropsStats": 2
+  },
+  "Distortion Bomb": {
+   "hasSecondaryEffect": true
+  },
+  "Alluring Maze": {
+   "defenseStat": "sd"
+  },
+  "Stealth Kill": {
+   "alwaysHits": true
+  },
+  "Dense Fog Bloom": {
+   "willCharge": true
+  },
+  "Impulse": {
+   "hasSecondaryEffect": true
+  },
+  "Luscious Whisper": {
+   "defenseStat": "fd"
+  },
+  "Irreversible Trick": {
+   "alwaysHits": true
+  },
+  "Time Screw": {
+   "alwaysHits": true
+  },
+  "Take Over": {
+   "isFoul": true
+  }
+ },
+ "extra_abilities": [
+  "Frail Health"
+ ],
+ "extra_items": [
+  "Absorber",
+  "Crystal Mirror",
+  "Exit Plan",
+  "Giant Bit",
+  "Izanagi Object",
+  "Pure Sand",
+  "Radiant Hairpin",
+  "Spirit Torch",
+  "Tengu Geta",
+  "Tsuzumi Drum",
+  "Yggdrasil Seed"
+ ]
+}

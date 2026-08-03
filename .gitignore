@@ -2,6 +2,7 @@
 Thumbs.db
 /data/*
 !/data/tpdp_data.json
+!/data/calc_extras.json
 !/data/sprites/
 !/data/animations/
 __pycache__/
