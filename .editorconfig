@@ -1,0 +1,39 @@
+root = true
+
+# Project standard: hard tabs, displayed 4 wide.
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = tab
+indent_size = 4
+tab_width = 4
+
+# YAML forbids tabs in indentation. Parsers don't reject them outright -- they
+# silently flatten the nesting -- so a tab-indented workflow would break CI with
+# no error message.
+[*.{yml,yaml}]
+indent_style = space
+indent_size = 2
+
+# PEP 8 mandates spaces, and mixing the two is a hard TabError in Python 3.
+[*.py]
+indent_style = space
+indent_size = 4
+
+# Leading tabs turn ordinary lines into code blocks in Markdown.
+[*.md]
+indent_style = space
+indent_size = 2
+
+# Generated or vendored; left exactly as produced.
+[{deno.lock,Cargo.lock}]
+indent_style = unset
+indent_size = unset
+trim_trailing_whitespace = unset
+insert_final_newline = unset
+
+[data/*.json]
+indent_style = unset
+indent_size = unset

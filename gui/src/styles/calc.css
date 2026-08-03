@@ -1,0 +1,358 @@
+.calc-page {
+	min-height: 100vh;
+	padding: 1rem 1.5rem 3rem;
+}
+
+.calc-header {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	margin-bottom: 1.5rem;
+	flex-wrap: wrap;
+}
+
+.calc-page .back {
+	padding: 0.5rem 1rem;
+	border: 1px solid #ff1493;
+	background: transparent;
+	color: #fff;
+	cursor: pointer;
+	white-space: nowrap;
+	transition: background 0.15s;
+}
+
+.calc-page .back:hover {
+	background: rgba(255, 20, 147, 0.15);
+}
+
+.calc-header-actions {
+	display: flex;
+	gap: 0.5rem;
+	margin-left: auto;
+}
+
+.calc-btn {
+	padding: 0.45rem 0.9rem;
+	border: 1px solid #444;
+	background: #111;
+	color: #ccc;
+	font-size: 0.8rem;
+	cursor: pointer;
+	transition: all 0.15s;
+}
+
+.calc-btn:hover {
+	border-color: #ff1493;
+	color: #fff;
+}
+
+.calc-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+	gap: 1.25rem;
+	margin-bottom: 1.25rem;
+}
+
+.calc-pane {
+	border: 1px solid #333;
+	background: rgba(255, 255, 255, 0.02);
+	padding: 1rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.7rem;
+}
+
+.pane-title {
+	font-size: 0.75rem;
+	text-transform: uppercase;
+	letter-spacing: 0.12em;
+	color: #ff1493;
+	border-bottom: 1px solid #222;
+	padding-bottom: 0.4rem;
+}
+
+.pane-types {
+	display: flex;
+	align-items: center;
+	gap: 0.4rem;
+	flex-wrap: wrap;
+}
+
+.pane-cost {
+	font-size: 0.7rem;
+	color: #888;
+	margin-left: auto;
+}
+
+.calc-page .type-badge {
+	font-size: 0.62rem;
+	font-weight: 700;
+	padding: 0.12rem 0.45rem;
+	color: #fff;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+	letter-spacing: 0.03em;
+}
+
+.field {
+	display: flex;
+	flex-direction: column;
+	gap: 0.3rem;
+	min-width: 0;
+}
+
+.field label {
+	font-size: 0.7rem;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	color: #888;
+}
+
+.field input {
+	padding: 0.4rem 0.5rem;
+	border: 1px solid #444;
+	background: #111;
+	color: #fff;
+	font-size: 0.85rem;
+	font-family: inherit;
+}
+
+.field input:focus {
+	outline: none;
+	border-color: #ff1493;
+}
+
+.field-row {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 0.6rem;
+}
+
+.stat-inputs {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+	border-top: 1px solid #222;
+	padding-top: 0.6rem;
+}
+
+.stat-input-head,
+.stat-input-row {
+	display: grid;
+	grid-template-columns: 60px 1fr 1fr;
+	gap: 0.5rem;
+	align-items: center;
+}
+
+.stat-input-head span {
+	font-size: 0.62rem;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	color: #666;
+	text-align: center;
+}
+
+.stat-input-label {
+	font-size: 0.78rem;
+	color: #ccc;
+}
+
+.stat-input-row input {
+	width: 100%;
+	padding: 0.28rem 0.4rem;
+	border: 1px solid #333;
+	background: #111;
+	color: #fff;
+	font-size: 0.78rem;
+	text-align: center;
+	font-family: inherit;
+}
+
+.stat-input-row input:focus {
+	outline: none;
+	border-color: #ff1493;
+}
+
+/* HP takes Puppet Points but can't be boosted in battle. */
+.stat-input-na {
+	font-size: 0.78rem;
+	color: #444;
+	text-align: center;
+}
+
+.pp-summary {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 0.4rem;
+	margin-top: 0.45rem;
+	padding-top: 0.45rem;
+	border-top: 1px solid #222;
+	font-size: 0.7rem;
+	color: #999;
+}
+
+.pp-summary.over {
+	color: #ff6b6b;
+}
+
+.pp-summary.over::after {
+	content: 'over limit';
+	color: #ff6b6b;
+	font-weight: 600;
+}
+
+.pp-hint {
+	color: #666;
+}
+
+.pp-summary.over .pp-hint {
+	color: #a05252;
+}
+
+.calc-controls {
+	display: grid;
+	grid-template-columns: 2fr 1fr 1fr auto;
+	gap: 1rem;
+	align-items: end;
+	border: 1px solid #333;
+	background: rgba(255, 255, 255, 0.02);
+	padding: 1rem;
+	margin-bottom: 1.25rem;
+}
+
+.calc-result {
+	border: 1px solid #ff1493;
+	background: rgba(255, 20, 147, 0.06);
+	padding: 1.25rem;
+}
+
+.result-headline {
+	font-size: 1.6rem;
+	font-weight: 700;
+	color: #fff;
+	line-height: 1.2;
+}
+
+.result-percent {
+	font-size: 1.1rem;
+	color: #ff9ec7;
+	font-weight: 600;
+}
+
+.result-ko {
+	margin-top: 0.35rem;
+	font-size: 0.9rem;
+	color: #00ff7f;
+}
+
+.result-hp {
+	color: #777;
+	font-size: 0.8rem;
+}
+
+.result-description {
+	margin-top: 0.75rem;
+	font-family: 'Lora', serif;
+	font-style: italic;
+	font-size: 0.9rem;
+	line-height: 1.6;
+	color: #ddd;
+	border-left: 2px solid #ff1493;
+	padding-left: 0.75rem;
+}
+
+.result-rolls {
+	margin-top: 0.75rem;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.3rem;
+}
+
+.roll {
+	font-size: 0.68rem;
+	color: #999;
+	background: rgba(255, 255, 255, 0.04);
+	border: 1px solid #2a2a2a;
+	padding: 0.1rem 0.35rem;
+}
+
+.calc-status {
+	padding: 2.5rem;
+	text-align: center;
+	color: #777;
+}
+
+.calc-status.error {
+	color: #ff4444;
+}
+
+.calc-page .loading-gif {
+	image-rendering: pixelated;
+	max-width: 160px;
+}
+
+.calc-credit {
+	margin-top: 1.5rem;
+	font-size: 0.7rem;
+	line-height: 1.6;
+	color: #666;
+	border-top: 1px solid #1e1e1e;
+	padding-top: 0.75rem;
+}
+
+.calc-credit a {
+	color: #ff9ec7;
+}
+
+@media (max-width: 720px) {
+	.calc-controls {
+		grid-template-columns: 1fr;
+		align-items: stretch;
+	}
+}
+
+/* Themed replacement for the stock checkbox, which sat awkwardly beside the
+   search fields. Reads as a pressable pill and lines up with them. */
+.toggle-pill {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	width: 100%;
+	padding: 0.4rem 0.7rem;
+	border: 1px solid #444;
+	background: #111;
+	color: #999;
+	font-size: 0.85rem;
+	font-family: inherit;
+	cursor: pointer;
+	white-space: nowrap;
+	transition: all 0.15s;
+}
+
+.toggle-pill:hover {
+	border-color: #666;
+	color: #ccc;
+}
+
+.toggle-dot {
+	width: 9px;
+	height: 9px;
+	border-radius: 50%;
+	border: 1px solid #555;
+	background: transparent;
+	flex-shrink: 0;
+	transition: all 0.15s;
+}
+
+.toggle-pill.on {
+	border-color: #ff1493;
+	background: rgba(255, 20, 147, 0.15);
+	color: #fff;
+}
+
+.toggle-pill.on .toggle-dot {
+	border-color: #ff1493;
+	background: #ff1493;
+	box-shadow: 0 0 6px rgba(255, 20, 147, 0.8);
+}

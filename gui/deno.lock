@@ -1,6 +1,7 @@
 {
   "version": "5",
   "specifiers": {
+    "jsr:@std/yaml@*": "1.2.0",
     "npm:@sveltejs/adapter-static@^3.0.6": "3.0.10_@sveltejs+kit@2.70.2__@sveltejs+vite-plugin-svelte@5.1.1___svelte@5.56.8___vite@6.4.3__svelte@5.56.8__typescript@5.6.3__vite@6.4.3_@sveltejs+vite-plugin-svelte@5.1.1__svelte@5.56.8__vite@6.4.3_svelte@5.56.8_typescript@5.6.3_vite@6.4.3",
     "npm:@sveltejs/kit@^2.9.0": "2.70.2_@sveltejs+vite-plugin-svelte@5.1.1__svelte@5.56.8__vite@6.4.3_svelte@5.56.8_typescript@5.6.3_vite@6.4.3",
     "npm:@sveltejs/vite-plugin-svelte@5": "5.1.1_svelte@5.56.8_vite@6.4.3",
@@ -8,10 +9,17 @@
     "npm:@tauri-apps/cli@2": "2.11.4",
     "npm:@tauri-apps/plugin-opener@2": "2.5.4",
     "npm:@tauri-apps/plugin-sql@^2.4.0": "2.4.0",
+    "npm:prettier-plugin-svelte@^3.2.6": "3.5.2_prettier@3.9.6_svelte@5.56.8",
+    "npm:prettier@^3.3.3": "3.9.6",
     "npm:svelte-check@4": "4.7.4_svelte@5.56.8_typescript@5.6.3",
     "npm:svelte@5": "5.56.8",
     "npm:typescript@~5.6.2": "5.6.3",
     "npm:vite@^6.0.3": "6.4.3"
+  },
+  "jsr": {
+    "@std/yaml@1.2.0": {
+      "integrity": "20beb41e4983ba3437dbefac62b14061ab058e8a187596f19d28ff9035f6e6cf"
+    }
   },
   "npm": {
     "@esbuild/aix-ppc64@0.25.12": {
@@ -595,6 +603,17 @@
         "source-map-js"
       ]
     },
+    "prettier-plugin-svelte@3.5.2_prettier@3.9.6_svelte@5.56.8": {
+      "integrity": "sha512-ItFouLvzSFE3ulNl4DKoWM3BGcbDCNVpIyy/Y3F2gC3aNiGLxtFUdffVqO5Z5hhYG+DFT5KULWaxmeFFpdbvaQ==",
+      "dependencies": [
+        "prettier",
+        "svelte"
+      ]
+    },
+    "prettier@3.9.6": {
+      "integrity": "sha512-OpN0zzVdiaiAhxpuuj5efpIS4sY9j7bY6uR5mnj5yPzGkdkjNKSJeUThPb60Jw29QuAZgA4o+/iB49kFiaBX6g==",
+      "bin": true
+    },
     "readdirp@4.1.2": {
       "integrity": "sha512-GDhwkLfywWL2s6vEjyhri+eXmfH6j1L7JE27WhqLeYzoh/A3DBaYGEj2H/HFZCn/kMfim73FXxEJTw06WtxQwg=="
     },
@@ -740,6 +759,8 @@
         "npm:@tauri-apps/cli@2",
         "npm:@tauri-apps/plugin-opener@2",
         "npm:@tauri-apps/plugin-sql@^2.4.0",
+        "npm:prettier-plugin-svelte@^3.2.6",
+        "npm:prettier@^3.3.3",
         "npm:svelte-check@4",
         "npm:svelte@5",
         "npm:typescript@~5.6.2",

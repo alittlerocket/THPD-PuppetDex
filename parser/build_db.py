@@ -5,6 +5,7 @@ from pathlib import Path
 
 DATA_JSON = Path(__file__).parent.parent / "data" / "tpdp_data.json"
 DATA_DB   = Path(__file__).parent.parent / "data" / "puppetdex.db"
+CALC_EXTRAS = Path(__file__).parent.parent / "data" / "calc_extras.json"
 
 
 SCHEMA = """
@@ -121,6 +122,39 @@ CREATE TABLE items (
     category     TEXT
 );
 
+-- Damage-calculator tables.
+-- The wiki publishes neither the type-effectiveness chart nor the mechanical
+-- move flags the engine needs, so they are curated in data/calc_extras.json
+-- and materialised here. Keeping them in the database means the app has a
+-- single source of truth and never ships duplicate copies of game data.
+CREATE TABLE type_chart (
+    attacking    TEXT NOT NULL,
+    defending    TEXT NOT NULL,
+    multiplier   REAL NOT NULL,
+    PRIMARY KEY (attacking, defending)
+);
+
+CREATE TABLE calc_moves (
+    name         TEXT PRIMARY KEY,
+    type         TEXT,
+    category     TEXT,
+    bp           INTEGER,
+    accuracy     INTEGER,
+    -- Remaining engine flags as a JSON object; they are sparse and the set
+    -- grows upstream, so columns would mostly be NULL.
+    flags        TEXT
+);
+
+-- Selectable ability/held-item names, unioned at build time from the dex and
+-- the calculator so the app can just query one list.
+CREATE TABLE calc_abilities (
+    name         TEXT PRIMARY KEY
+);
+
+CREATE TABLE calc_items (
+    name         TEXT PRIMARY KEY
+);
+
 CREATE INDEX idx_puppets_name    ON puppets(name);
 CREATE INDEX idx_puppets_type1   ON puppets(type1);
 CREATE INDEX idx_puppets_is_mod  ON puppets(is_mod);
@@ -197,6 +231,121 @@ def _insert_puppet_details(cur: sqlite3.Cursor, rowid: int, p: dict) -> None:
         )
 
 
+# Held-item categories; the rest are skill cards, key items and consumables
+# that can't be equipped in battle.
+_HELD_CATEGORIES = ("Hold 1", "Hold 2")
+
+
+def _derive_move_fields(name: str, type_: str | None, category: str | None,
+                        cls: str | None, power: int | None, accuracy: int | None,
+                        priority: int | None) -> dict:
+    """
+    Reconstruct the calculator's move fields from scraped dex columns.
+
+    These are all recoverable, so they are not duplicated in calc_extras.json:
+      bp          power, except NULL means 0 for Status moves and 1 for damaging
+                  ones -- the engine treats 1 as "power computed at runtime" and
+                  returns no damage at all on 0.
+      acc100      accuracy == 100
+      isEN        class == 'EN'
+      isVoid      type == 'Void'
+      isJavelin   name ends with ' Javelin'
+      priority    only when positive; the engine just asks "does this go first?"
+    """
+    cat = category if category in ("Focus", "Spread") else "Status"
+    bp = power if power is not None else (0 if cat == "Status" else 1)
+
+    derived: dict = {"type": type_, "category": cat, "bp": bp}
+    if accuracy is not None:
+        if accuracy == 100:
+            derived["acc100"] = True
+        else:
+            derived["accuracy"] = accuracy
+    if cls == "EN":
+        derived["isEN"] = True
+    if type_ == "Void":
+        derived["isVoid"] = True
+    if name.endswith(" Javelin"):
+        derived["isJavelin"] = True
+    if priority and priority > 0:
+        derived["priority"] = priority
+    return derived
+
+
+def _insert_calc_data(cur: sqlite3.Cursor) -> None:
+    """
+    Populate the calculator tables.
+
+    Move data is derived from the scraped skills table wherever possible; only
+    mechanical flags with no dex equivalent come from calc_extras.json. Skipped
+    with a warning if that file is missing, so a dex-only build still succeeds.
+    """
+    if not CALC_EXTRAS.exists():
+        print(f"  WARN {CALC_EXTRAS.name} missing; calculator tables left empty", file=sys.stderr)
+        return
+
+    with open(CALC_EXTRAS, encoding="utf-8") as f:
+        extras = json.load(f)
+
+    for attacking, row in extras["type_chart"].items():
+        for defending, multiplier in row.items():
+            cur.execute(
+                "INSERT INTO type_chart (attacking, defending, multiplier) VALUES (?,?,?)",
+                (attacking, defending, multiplier),
+            )
+
+    move_flags = extras["move_flags"]
+    seen: set[str] = set()
+    rows = cur.execute(
+        "SELECT DISTINCT name, type, category, class, power, accuracy, priority FROM skills"
+    ).fetchall()
+    for name, type_, category, cls, power, accuracy, priority in rows:
+        if name in seen:
+            continue
+        seen.add(name)
+        move = _derive_move_fields(name, type_, category, cls, power, accuracy, priority)
+        move.update(move_flags.get(name, {}))
+        flags = {k: v for k, v in move.items()
+                 if k not in ("type", "category", "bp", "accuracy")}
+        cur.execute(
+            "INSERT INTO calc_moves (name, type, category, bp, accuracy, flags) VALUES (?,?,?,?,?,?)",
+            (name, move["type"], move["category"], move["bp"], move.get("accuracy"),
+             json.dumps(flags) if flags else None),
+        )
+
+    # A handful of curated moves aren't in the dex at all; keep them as-is.
+    for name, move in move_flags.items():
+        if name in seen:
+            continue
+        flags = {k: v for k, v in move.items()
+                 if k not in ("type", "category", "bp", "accuracy")}
+        cur.execute(
+            "INSERT INTO calc_moves (name, type, category, bp, accuracy, flags) VALUES (?,?,?,?,?,?)",
+            (name, move.get("type"), move.get("category"), move.get("bp"),
+             move.get("accuracy"), json.dumps(flags) if flags else None),
+        )
+        seen.add(name)
+
+    # Union the dex's own names with the few the calculator needs but the dex lacks.
+    abilities = set(extras["extra_abilities"])
+    abilities.update(n for (n,) in cur.execute("SELECT name FROM abilities WHERE name IS NOT NULL"))
+    for name in sorted(abilities):
+        cur.execute("INSERT INTO calc_abilities (name) VALUES (?)", (name,))
+
+    placeholders = ",".join("?" * len(_HELD_CATEGORIES))
+    items = set(extras["extra_items"])
+    items.update(n for (n,) in cur.execute(
+        f"SELECT name FROM items WHERE name IS NOT NULL AND category IN ({placeholders})",
+        _HELD_CATEGORIES,
+    ))
+    for name in sorted(items):
+        cur.execute("INSERT INTO calc_items (name) VALUES (?)", (name,))
+
+    print(f"  calc:      {len(seen)} moves ({len(move_flags)} with curated flags), "
+          f"{len(abilities)} abilities, {len(items)} items, "
+          f"{len(extras['type_chart'])} types", file=sys.stderr)
+
+
 def build(data_json: Path = DATA_JSON, data_db: Path = DATA_DB) -> None:
     with open(data_json, encoding="utf-8") as f:
         data = json.load(f)
@@ -237,6 +386,8 @@ def build(data_json: Path = DATA_JSON, data_db: Path = DATA_DB) -> None:
             "INSERT INTO items (name, jp_name, description, price, category) VALUES (?,?,?,?,?)",
             (it["name"], it.get("jp_name"), it.get("description"), it.get("price"), it.get("category")),
         )
+
+    _insert_calc_data(cur)
 
     con.commit()
     con.close()

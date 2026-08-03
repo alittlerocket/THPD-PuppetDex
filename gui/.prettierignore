@@ -1,0 +1,6 @@
+build
+.svelte-kit
+node_modules
+src-tauri/target
+static
+deno.lock
