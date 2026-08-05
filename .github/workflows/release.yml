@@ -12,11 +12,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - platform: windows-latest
-            args: ''
-          - platform: ubuntu-22.04
-            args: ''
+        # Pinned: WebKitGTK package names changed in 24.04.
+        platform: [windows-latest, ubuntu-22.04]
 
     runs-on: ${{ matrix.platform }}
     steps:
@@ -26,24 +23,15 @@ jobs:
         with:
           python-version: '3.12'
 
-      # tpdp_data.json and the sprites are committed, so this only converts the
-      # JSON into SQLite -- no network access. A release must not depend on the
-      # wiki being reachable, and re-scraping on every run (including every
-      # retried run) would put hundreds of needless requests on a
-      # volunteer-run site.
-      - name: Build database from committed data
-        run: python3 parser/run_all.py --db-only
-
-      # gui/static holds symlinks into data/, which Windows checkouts
-      # materialise as plain text files. Replacing them with real copies
-      # behaves identically on every runner.
-      - name: Stage static assets
+      # Git on Windows checks the gui/static symlinks out as text files, so
+      # they are replaced with real copies here.
+      - name: Prepare bundled data
         shell: bash
         run: |
+          python3 parser/run_all.py --db-only
           rm -rf gui/static/sprites gui/static/funky-cirno.gif
           cp -r data/sprites gui/static/sprites
           cp data/animations/funky-cirno.gif gui/static/funky-cirno.gif
-          test -f data/puppetdex.db || { echo "database was not built"; exit 1; }
 
       - uses: denoland/setup-deno@v2
         with:
@@ -59,9 +47,8 @@ jobs:
         if: matrix.platform == 'ubuntu-22.04'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libwebkit2gtk-4.1-dev librsvg2-dev patchelf \
-            build-essential curl wget file libssl-dev libgtk-3-dev \
-            libayatana-appindicator3-dev
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libgtk-3-dev \
+            librsvg2-dev libssl-dev build-essential
 
       - name: Install frontend dependencies
         working-directory: gui
@@ -76,4 +63,3 @@ jobs:
           releaseName: 'Puppetdex ${{ github.ref_name }}'
           releaseDraft: true
           prerelease: false
-          args: ${{ matrix.args }}

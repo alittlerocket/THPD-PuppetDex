@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "thpd-puppetdex-tauri",
+  "productName": "Puppetdex",
   "version": "0.2.0",
   "identifier": "com.littlerocket.thpd-puppetdex-tauri",
   "build": {
@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "thpd-puppetdex-tauri",
+        "title": "Puppetdex",
         "width": 800,
         "height": 600
       }

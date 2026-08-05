@@ -273,16 +273,11 @@ def _derive_move_fields(name: str, type_: str | None, category: str | None,
 
 
 def _insert_calc_data(cur: sqlite3.Cursor) -> None:
-    """
-    Populate the calculator tables.
-
-    Move data is derived from the scraped skills table wherever possible; only
-    mechanical flags with no dex equivalent come from calc_extras.json. Skipped
-    with a warning if that file is missing, so a dex-only build still succeeds.
-    """
     if not CALC_EXTRAS.exists():
-        print(f"  WARN {CALC_EXTRAS.name} missing; calculator tables left empty", file=sys.stderr)
-        return
+        raise FileNotFoundError(
+            f"{CALC_EXTRAS} is missing, so the calculator tables cannot be built. "
+            "It is committed to the repo -- check it wasn't excluded by .gitignore."
+        )
 
     with open(CALC_EXTRAS, encoding="utf-8") as f:
         extras = json.load(f)
