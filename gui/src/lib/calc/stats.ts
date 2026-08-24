@@ -18,7 +18,12 @@ const PARALYSIS = 'Paralyzed';
  * alone those propagate silently all the way to a NaN damage roll. Clamping
  * here keeps every divisor and multiplier in the engine finite.
  */
-function num(value: number, fallback: number, min: number, max: number): number {
+function num(
+	value: number,
+	fallback: number,
+	min: number,
+	max: number,
+): number {
 	const n = Number(value);
 	if (!Number.isFinite(n)) return fallback;
 	return Math.min(max, Math.max(min, Math.trunc(n)));

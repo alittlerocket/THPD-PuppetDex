@@ -495,7 +495,7 @@ export function getDamageResult(
 		 * Power = (40 x foe Speed / user Speed) + 1, capped at 150
 		 * but tpdpextcalc omits the +1, making every result 1 BP low.
 		 * See https://tpdp.miraheze.org/wiki/Impact_Rebellion
-		*/
+		 */
 		case 'Impact Rebellion':
 			basePower = !(attacker.stats[SP] > 0)
 				? 150
@@ -645,7 +645,6 @@ export function getDamageResult(
 			basePower = move.bp;
 	}
 
-
 	let defense: number;
 	let defenseStat: StatKey = move.defenseStat
 		? move.defenseStat
@@ -721,7 +720,6 @@ export function getDamageResult(
 
 	defense = Math.max(1, chainMods(defense, dfMods));
 
-	
 	let baseDamage = getBaseDamage(attacker.level, basePower, attack, defense);
 
 	// Since RNG comes 3rd in this equation, we can only really apply the crit factor first

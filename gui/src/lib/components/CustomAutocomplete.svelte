@@ -21,7 +21,9 @@
 	// content-visibility, so offscreen ones cost nothing to render.
 	let matches = $derived(
 		value
-			? options.filter((o) => o.toLowerCase().includes(value.toLowerCase()))
+			? options.filter((o) =>
+					o.toLowerCase().includes(value.toLowerCase()),
+				)
 			: options,
 	);
 

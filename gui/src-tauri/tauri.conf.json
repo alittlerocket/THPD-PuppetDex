@@ -1,51 +1,46 @@
 {
-  "$schema": "https://schema.tauri.app/config/2",
-  "productName": "Puppetdex",
-  "version": "0.2.1",
-  "identifier": "com.littlerocket.thpd-puppetdex-tauri",
-  "build": {
-    "beforeDevCommand": "deno task dev",
-    "devUrl": "http://localhost:1420",
-    "beforeBuildCommand": "deno task build",
-    "frontendDist": "../build"
-  },
-  "app": {
-    "windows": [
-      {
-        "title": "Puppetdex",
-        "width": 800,
-        "height": 600
-      }
-    ],
-    "security": {
-      "csp": null
-    }
-  },
-  "bundle": {
-    "active": true,
-    "targets": [
-      "deb",
-      "rpm",
-      "msi",
-      "nsis"
-    ],
-    "resources": {
-      "../../data/puppetdex.db": "puppetdex.db"
-    },
-    "icon": [
-      "icons/32x32.png",
-      "icons/128x128.png",
-      "icons/128x128@2x.png",
-      "icons/icon.icns",
-      "icons/icon.ico"
-    ],
-    "windows": {
-      "webviewInstallMode": {
-        "type": "downloadBootstrapper"
-      },
-      "wix": {
-        "upgradeCode": "8a6806c0-67e3-55f6-9bb6-787892a3c8f2"
-      }
-    }
-  }
+	"$schema": "https://schema.tauri.app/config/2",
+	"productName": "Puppetdex",
+	"version": "0.2.2",
+	"identifier": "com.littlerocket.thpd-puppetdex-tauri",
+	"build": {
+		"beforeDevCommand": "deno task dev",
+		"devUrl": "http://localhost:1420",
+		"beforeBuildCommand": "deno task build",
+		"frontendDist": "../build"
+	},
+	"app": {
+		"windows": [
+			{
+				"title": "Puppetdex",
+				"width": 800,
+				"height": 600
+			}
+		],
+		"security": {
+			"csp": null
+		}
+	},
+	"bundle": {
+		"active": true,
+		"targets": ["deb", "rpm", "msi", "nsis"],
+		"resources": {
+			"../../data/puppetdex.db": "puppetdex.db"
+		},
+		"icon": [
+			"icons/32x32.png",
+			"icons/128x128.png",
+			"icons/128x128@2x.png",
+			"icons/icon.icns",
+			"icons/icon.ico"
+		],
+		"windows": {
+			"webviewInstallMode": {
+				"type": "downloadBootstrapper"
+			},
+			"wix": {
+				"upgradeCode": "8a6806c0-67e3-55f6-9bb6-787892a3c8f2"
+			}
+		}
+	}
 }

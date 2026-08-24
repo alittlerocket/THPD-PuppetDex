@@ -2,7 +2,6 @@ import type Database from '@tauri-apps/plugin-sql';
 import { getDb } from '$lib/data/db';
 import { fetchPuppetDetail } from '$lib/data/puppetRepository';
 import { parseDrops, type DropEntry } from '$lib/utils/drops';
-import { STYLES } from '$lib/utils/styleUtils';
 import type {
 	PuppetRow,
 	StyleSibling,
@@ -99,10 +98,6 @@ export class PuppetDetailViewModel {
 			type1: this.puppet.type1,
 		};
 		return [self, ...this.relatedForms].sort((a, b) => a.rowid - b.rowid);
-	}
-
-	styleOf(name: string): string {
-		return STYLES.find((s) => name.startsWith(s + ' ')) ?? name;
 	}
 
 	relatedFormLabel(form: {

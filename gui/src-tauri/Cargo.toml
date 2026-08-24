@@ -1,16 +1,14 @@
 [package]
 name = "thpd-puppetdex-tauri"
-version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
+version = "0.2.2"
+description = "Desktop puppet lookup and damage calculator for Touhou Puppet Dance Performance"
+authors = ["alittlerocket"]
+license = "MIT"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [lib]
-# The `_lib` suffix may seem redundant but it is necessary
-# to make the lib name unique and wouldn't conflict with the bin name.
-# This seems to be only an issue on Windows, see https://github.com/rust-lang/cargo/issues/8519
+# The `_lib` suffix keeps the library name distinct from the binary's; they
+# collide on Windows otherwise. https://github.com/rust-lang/cargo/issues/8519
 name = "thpd_puppetdex_tauri_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 

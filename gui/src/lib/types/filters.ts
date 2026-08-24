@@ -18,6 +18,7 @@ export interface PuppetFilters {
 	costMin: number | null;
 	costMax: number | null;
 	ability: string;
+	/** '' (any), 'official', 'modded', or the name of one specific mod tab. */
 	isMod: string;
 	location: string;
 	moves: string[];
@@ -44,7 +45,7 @@ export function emptyFilters(): PuppetFilters {
 		costMin: null,
 		costMax: null,
 		ability: '',
-		isMod: 'all',
+		isMod: '',
 		location: '',
 		moves: [],
 		type: '',
@@ -57,6 +58,7 @@ export interface FilterOptions {
 	locations: string[];
 	moves: string[];
 	types: string[];
+	mods: string[];
 }
 
 // Maps each range-filterable puppet column to its [min, max] filter fields, so

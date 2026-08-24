@@ -91,8 +91,11 @@ function buildPuppetListQuery(
 		clauses.push(`(ability1 = ${p1} OR ability2 = ${p2})`);
 	}
 
+	// Three-way: the two sentinels span every mod, anything else is the name of
+	// one specific mod tab. Empty means no constraint.
 	if (filters.isMod === 'official') clauses.push('is_mod = 0');
 	else if (filters.isMod === 'modded') clauses.push('is_mod = 1');
+	else if (filters.isMod) clauses.push(`mod_tab = ${ph(filters.isMod)}`);
 
 	if (filters.location) {
 		const p = ph(filters.location);
@@ -159,27 +162,31 @@ export async function fetchPuppetList(
 }
 
 export async function fetchFilterOptions(db: Database): Promise<FilterOptions> {
-	const [abilities, locations, moves, types] = await Promise.all([
+	const [abilities, locations, moves, types, mods] = await Promise.all([
 		db.select<{ a: string }[]>(
 			`SELECT ability1 AS a FROM puppets WHERE ability1 IS NOT NULL
-       UNION
-       SELECT ability2 AS a FROM puppets WHERE ability2 IS NOT NULL
-       ORDER BY a`,
+			UNION
+			SELECT ability2 AS a FROM puppets WHERE ability2 IS NOT NULL
+			ORDER BY a`,
 		),
 		db.select<{ location: string }[]>(
 			`SELECT DISTINCT location FROM puppet_locations WHERE location IS NOT NULL ORDER BY location`,
 		),
 		db.select<{ n: string }[]>(
 			`SELECT name AS n FROM puppet_learnset WHERE name IS NOT NULL
-       UNION
-       SELECT name AS n FROM puppet_skill_cards WHERE name IS NOT NULL
-       ORDER BY n`,
+			UNION
+			SELECT name AS n FROM puppet_skill_cards WHERE name IS NOT NULL
+			ORDER BY n`,
 		),
 		db.select<{ t: string }[]>(
 			`SELECT type1 AS t FROM puppets WHERE type1 IS NOT NULL
-       UNION
-       SELECT type2 AS t FROM puppets WHERE type2 IS NOT NULL
-       ORDER BY t`,
+			UNION
+			SELECT type2 AS t FROM puppets WHERE type2 IS NOT NULL
+			ORDER BY t`,
+		),
+		db.select<{ m: string }[]>(
+			`SELECT DISTINCT mod_tab AS m FROM puppets WHERE mod_tab IS NOT NULL
+			ORDER BY m`,
 		),
 	]);
 
@@ -188,6 +195,7 @@ export async function fetchFilterOptions(db: Database): Promise<FilterOptions> {
 		locations: locations.map((r) => r.location),
 		moves: moves.map((r) => r.n),
 		types: types.map((r) => r.t),
+		mods: mods.map((r) => r.m),
 	};
 }
 

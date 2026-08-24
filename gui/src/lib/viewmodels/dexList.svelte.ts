@@ -43,6 +43,7 @@ export class DexListViewModel {
 	locationOptions = $state<string[]>([]);
 	moveOptions = $state<string[]>([]);
 	typeOptions = $state<string[]>([]);
+	modOptions = $state<string[]>([]);
 
 	private appliedFilters = $state<PuppetFilters>(emptyFilters());
 
@@ -161,6 +162,15 @@ export class DexListViewModel {
 		return keys.map((k) => ({ value: k, label: SORT_LABELS[k] }));
 	});
 
+	modFilterOptions: { value: string; label: string }[] = $derived([
+		{ value: 'official', label: 'Official Only' },
+		{ value: 'modded', label: 'Modded Only' },
+		...this.modOptions.map((mod) => ({
+			value: mod,
+			label: mod.replace(/\s*-\s*$/, ''),
+		})),
+	]);
+
 	#activeStats: StatColumn[] = $derived(
 		activeStatColumns(this.appliedFilters),
 	);
@@ -276,6 +286,7 @@ export class DexListViewModel {
 		this.locationOptions = options.locations;
 		this.moveOptions = options.moves;
 		this.typeOptions = options.types;
+		this.modOptions = options.mods;
 	}
 
 	toggleFilters() {

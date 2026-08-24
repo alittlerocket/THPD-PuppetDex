@@ -189,11 +189,7 @@
 					<div class="filter-field">
 						<label for="isMod">Modded</label>
 						<CustomSelect
-							options={[
-								{ value: 'all', label: 'All' },
-								{ value: 'official', label: 'Official Only' },
-								{ value: 'modded', label: 'Modded Only' },
-							]}
+							options={vm.modFilterOptions}
 							bind:value={vm.filters.isMod}
 							placeholder="All"
 						/>

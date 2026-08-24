@@ -5,6 +5,7 @@
 	import SpriteReveal from '$lib/components/SpriteReveal.svelte';
 	import { typeColor } from '$lib/utils/typeColors';
 	import { categoryColor } from '$lib/utils/itemColors';
+	import { styleOf } from '$lib/utils/styleUtils';
 	import {
 		STAT_LABELS,
 		STAT_MAX,
@@ -42,7 +43,7 @@
 							class:active={sib.rowid === vm.puppet.rowid}
 							onclick={() => goto(`/dex/${sib.rowid}`)}
 						>
-							{vm.styleOf(sib.name)}
+							{styleOf(sib.name)}
 						</button>
 					{/each}
 				</div>

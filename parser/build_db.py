@@ -122,11 +122,6 @@ CREATE TABLE items (
     category     TEXT
 );
 
--- Damage-calculator tables.
--- The wiki publishes neither the type-effectiveness chart nor the mechanical
--- move flags the engine needs, so they are curated in data/calc_extras.json
--- and materialised here. Keeping them in the database means the app has a
--- single source of truth and never ships duplicate copies of game data.
 CREATE TABLE type_chart (
     attacking    TEXT NOT NULL,
     defending    TEXT NOT NULL,
@@ -145,8 +140,6 @@ CREATE TABLE calc_moves (
     flags        TEXT
 );
 
--- Selectable ability/held-item names, unioned at build time from the dex and
--- the calculator so the app can just query one list.
 CREATE TABLE calc_abilities (
     name         TEXT PRIMARY KEY
 );
